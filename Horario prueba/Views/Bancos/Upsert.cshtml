@@ -1,0 +1,58 @@
+﻿@model Horario_prueba.Models.Banco
+
+@{
+    bool esNuevo = Model.IdBanco == 0;
+    ViewData["Title"] = esNuevo ? "Crear banco" : "Editar banco";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Guardar" method="post">
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+    <input type="hidden" asp-for="IdBanco" />
+
+    <div class="form-group">
+        <label>Laboratorio</label>
+        <select asp-for="IdLaboratorio"
+                asp-items="ViewBag.Laboratorios"
+                class="form-control"></select>
+        <span asp-validation-for="IdLaboratorio" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Código del banco</label>
+        <input asp-for="Codigo" class="form-control" />
+        <span asp-validation-for="Codigo" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Capacidad (estudiantes)</label>
+        <input asp-for="Capacidad" class="form-control" />
+        <span asp-validation-for="Capacidad" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Estado</label>
+        <select asp-for="Estado" class="form-control">
+            <option>DISPONIBLE</option>
+            <option>OCUPADO</option>
+            <option>FUERA DE SERVICIO</option>
+        </select>
+        <span asp-validation-for="Estado" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Observaciones</label>
+        <textarea asp-for="Observaciones" class="form-control"></textarea>
+        <span asp-validation-for="Observaciones" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">
+        @(esNuevo ? "Crear" : "Guardar cambios")
+    </button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

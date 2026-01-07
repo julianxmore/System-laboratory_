@@ -1,0 +1,70 @@
+﻿@model Horario_prueba.Models.Laboratorio
+
+@{
+    bool esNuevo = Model.IdLaboratorio == 0;
+    ViewData["Title"] = esNuevo ? "Nuevo laboratorio" : "Editar laboratorio";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header text-white" style="background-color:#d62839;">
+                    <h4 class="mb-0">
+                        <i class="fas fa-flask"></i>
+                        @ViewData["Title"]
+                    </h4>
+                </div>
+                <div class="card-body">
+
+                    @* 🔴 MUESTRA ERRORES GENERALES *@
+                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                    <form asp-controller="Laboratorios" asp-action="Guardar" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden" asp-for="IdLaboratorio" />
+
+                        <div class="mb-3">
+                            <label asp-for="Nombre" class="form-label"></label>
+                            <input asp-for="Nombre" class="form-control" />
+                            <span asp-validation-for="Nombre" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Sede" class="form-label"></label>
+                            <input asp-for="Sede" class="form-control" />
+                            <span asp-validation-for="Sede" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Piso" class="form-label"></label>
+                            <input asp-for="Piso" class="form-control" />
+                            <span asp-validation-for="Piso" class="text-danger"></span>
+                        </div>
+
+                        @* Si tu modelo tiene Observaciones, deja esto; si no, bórralo *@
+                        <div class="mb-3">
+                            <label asp-for="Observaciones" class="form-label"></label>
+                            <textarea asp-for="Observaciones" class="form-control"></textarea>
+                            <span asp-validation-for="Observaciones" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            @(esNuevo ? "Crear laboratorio" : "Guardar cambios")
+                        </button>
+                        <a asp-controller="Laboratorios" asp-action="Index" class="btn btn-secondary ms-2">
+                            Volver a la lista
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+

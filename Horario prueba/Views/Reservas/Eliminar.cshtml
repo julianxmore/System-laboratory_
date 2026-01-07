@@ -1,0 +1,44 @@
+﻿@model Horario_prueba.Models.ReservaBanco
+
+@{
+    ViewData["Title"] = "Cancelar reserva";
+}
+
+<div class="lab-page-wrapper">
+    <div class="lab-container">
+        <div class="lab-card">
+            <h2>Cancelar reserva</h2>
+
+            <p>
+                ¿Seguro que deseas <strong>cancelar</strong> esta reserva?
+            </p>
+
+            <dl class="row">
+                <dt class="col-sm-3">Fecha</dt>
+                <dd class="col-sm-9">@Model.Fecha.ToString("yyyy-MM-dd")</dd>
+
+                <dt class="col-sm-3">Franja</dt>
+                <dd class="col-sm-9">@Model.FranjaHoraria?.Nombre</dd>
+
+                <dt class="col-sm-3">Laboratorio</dt>
+                <dd class="col-sm-9">@Model.Banco?.Laboratorio?.Nombre</dd>
+
+                <dt class="col-sm-3">Banco</dt>
+                <dd class="col-sm-9">@Model.Banco?.Codigo</dd>
+
+                <dt class="col-sm-3">Estudiante</dt>
+                <dd class="col-sm-9">@Model.Estudiante?.Nombre (@Model.Estudiante?.Codigo)</dd>
+            </dl>
+
+            <form asp-action="Eliminar" method="post">
+                <input type="hidden" asp-for="IdReserva" />
+                <button type="submit" class="btn btn-danger">
+                    Sí, cancelar reserva
+                </button>
+                <a asp-action="AdminLista" class="btn btn-secondary ms-2">
+                    No, volver
+                </a>
+            </form>
+        </div>
+    </div>
+</div>

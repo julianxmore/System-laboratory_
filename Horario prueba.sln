@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35818.85
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horario_prueba", "Horario prueba\Horario_prueba.csproj", "{54FD0D8D-0B00-4D15-BBFA-6E6400B47158}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{54FD0D8D-0B00-4D15-BBFA-6E6400B47158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54FD0D8D-0B00-4D15-BBFA-6E6400B47158}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54FD0D8D-0B00-4D15-BBFA-6E6400B47158}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54FD0D8D-0B00-4D15-BBFA-6E6400B47158}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4153B5DE-D625-4E53-9444-DF29C1AF52F5}
+	EndGlobalSection
+EndGlobal

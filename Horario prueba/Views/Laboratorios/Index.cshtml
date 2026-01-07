@@ -1,0 +1,249 @@
+﻿@model IEnumerable<Horario_prueba.Models.Laboratorio>
+
+@{
+    ViewData["Title"] = "Laboratorios";
+}
+
+<div class="lab-page-wrapper">
+    <div class="lab-container">
+        <div class="lab-header">
+            <div>
+                <h1>Laboratorios</h1>
+                <p class="lab-subtitle">
+                    Administra los laboratorios disponibles para reservas.
+                </p>
+            </div>
+            <a href="@Url.Action("Crear", "Laboratorios")" class="btn btn-danger lab-btn-new">
+                <i class="fas fa-plus-circle me-2"></i> Nuevo laboratorio
+            </a>
+        </div>
+
+        <div class="lab-card">
+            @if (!Model.Any())
+            {
+                <div class="text-center text-muted py-4">
+                    <i class="fas fa-flask fa-2x mb-3"></i>
+                    <p>No hay laboratorios registrados aún.</p>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table lab-table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Sede</th>
+                                <th>Piso</th>
+                                <th class="text-end">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var l in Model)
+                            {
+                                <tr>
+                                    <td>@l.Nombre</td>
+                                    <td>@l.Sede</td>
+                                    <td>@l.Piso</td>
+                                    <td class="text-end">
+                                        <a href="@Url.Action("Editar", "Laboratorios", new { id = l.IdLaboratorio })"
+                                           class="btn btn-sm btn-outline-secondary me-2">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </a>
+                                        <a href="@Url.Action("Eliminar", "Laboratorios", new { id = l.IdLaboratorio })"
+                                           class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash-alt"></i> Eliminar
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<hr class="my-4" />
+
+<div class="lab-card mt-4">
+    <h3 class="mb-2">Reservas Laboratorio - Clases</h3>
+    <p class="text-muted">Estas franjas se bloquearán todas las semanas y nadie podrá reservar bancos en ese laboratorio.</p>
+
+    @if (TempData["MsgOcup"] != null)
+    {
+        <div class="alert alert-info">@TempData["MsgOcup"]</div>
+    }
+
+    <form asp-controller="Laboratorios" asp-action="GuardarOcupacionSemanal" method="post" class="row g-3">
+        @Html.AntiForgeryToken()
+
+        <div class="col-md-4">
+            <label class="form-label">Laboratorio</label>
+            <select class="form-control" name="idLaboratorio">
+                <option value="0">-- Selecciona --</option>
+                @foreach (var l in (IEnumerable<SelectListItem>)ViewBag.Labs)
+                {
+                    <option value="@l.Value">@l.Text</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Día</label>
+            <select class="form-control" name="diaSemana">
+                @foreach (var d in (IEnumerable<SelectListItem>)ViewBag.Dias)
+                {
+                    <option value="@d.Value">@d.Text</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-5">
+            <label class="form-label">Franjas a bloquear</label>
+            <select class="form-control" name="franjasSeleccionadas" multiple size="6">
+                @foreach (var f in (IEnumerable<SelectListItem>)ViewBag.Franjas)
+                {
+                    <option value="@f.Value">@f.Text</option>
+                }
+            </select>
+            <small class="text-muted">Ctrl + click para seleccionar varias.</small>
+        </div>
+
+        <div class="col-12">
+            <button class="btn btn-danger" type="submit">Guardar ocupación semanal</button>
+        </div>
+    </form>
+
+    <hr class="my-3" />
+    <h5>Ocupaciones registradas</h5>
+
+    @{
+        var ocup = ViewBag.Ocupaciones as IEnumerable<Horario_prueba.Models.OcupacionLaboratorioSemanal>;
+        string DiaTxt(int d) => d switch
+        {
+            1 => "Lunes",
+            2 => "Martes",
+            3 => "Miércoles",
+            4 => "Jueves",
+            5 => "Viernes",
+            6 => "Sábado",
+            _ => "Domingo"
+        };
+    }
+
+    @if (ocup == null || !ocup.Any())
+    {
+        <p class="text-muted">No hay ocupaciones registradas.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-sm table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>Laboratorio</th>
+                        <th>Día</th>
+                        <th>Franja</th>
+                        <th class="text-end"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var o in ocup)
+                    {
+                        <tr>
+                            <td>@(o.Laboratorio?.Nombre ?? o.IdLaboratorio.ToString())</td>
+                            <td>@DiaTxt(o.DiaSemana)</td>
+                            <td>@(o.FranjaHoraria?.Nombre ?? o.IdFranja.ToString())</td>
+                            <td class="text-end">
+                                <form asp-controller="Laboratorios" asp-action="EliminarOcupacionSemanal" method="post" style="display:inline;">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="idOcupacion" value="@o.IdOcupacion" />
+                                    <button class="btn btn-sm btn-outline-danger" type="submit">Quitar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+}
+
+<style>
+    :root {
+        --primary-red: #d62839;
+        --dark-red: #a51c30;
+        --light-gray: #f5f5f5;
+        --white: #ffffff;
+    }
+
+    .lab-page-wrapper {
+        background-image: linear-gradient(135deg, rgba(214,40,57,0.08) 0%, rgba(255,255,255,0.9) 50%);
+        padding: 30px 0;
+    }
+
+    .lab-container {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .lab-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+        .lab-header h1 {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+    .lab-subtitle {
+        margin: 0;
+        color: #777;
+        font-size: 0.95rem;
+    }
+
+    .lab-card {
+        background: var(--white);
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(214, 40, 57, 0.15);
+        padding: 20px 25px;
+    }
+
+    .lab-table thead {
+        background-color: var(--primary-red);
+        color: white;
+    }
+
+        .lab-table thead th {
+            border: none;
+        }
+
+    .lab-table tbody tr:nth-child(even) {
+        background-color: rgba(214, 40, 57, 0.03);
+    }
+
+    .lab-btn-new {
+        background-color: var(--primary-red);
+        border-color: var(--primary-red);
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 10px 18px;
+    }
+
+        .lab-btn-new:hover {
+            background-color: var(--dark-red);
+            border-color: var(--dark-red);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(214, 40, 57, 0.3);
+        }
+</style>

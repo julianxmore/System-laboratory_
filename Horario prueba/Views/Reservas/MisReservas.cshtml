@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Horario_prueba.Models.ReservaBanco>
+
+@{
+    ViewData["Title"] = "Mis reservas";
+}
+
+<h2>Mis reservas</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Laboratorio</th>
+            <th>Banco</th>
+            <th>Franja</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@r.Fecha.ToString("yyyy-MM-dd")</td>
+                <td>@r.Banco?.Laboratorio?.Nombre</td>
+                <td>@r.Banco?.Codigo</td>
+                <td>@r.FranjaHoraria?.Nombre</td>
+                <td>@r.Estado</td>
+            </tr>
+        }
+    </tbody>
+</table> 

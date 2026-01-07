@@ -1,0 +1,119 @@
+﻿@model Horario_prueba.Models.CrearReservaViewModel
+
+@{
+    ViewData["Title"] = "Reservar banco";
+}
+
+<h2>Reservar banco</h2>
+
+<form asp-action="Crear" method="post">
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <!-- FECHA -->
+    <div class="form-group">
+        <label>Fecha</label>
+        <input asp-for="Fecha" type="date" class="form-control" id="fecha" />
+    </div>
+
+    <!-- LABORATORIO -->
+    <div class="form-group">
+        <label>Laboratorio</label>
+        <select asp-for="IdLaboratorio" class="form-control" id="laboratorio">
+            <option value="0">-- Selecciona --</option>
+            @foreach (var lab in Model.Laboratorios)
+            {
+                <option value="@lab.IdLaboratorio">@lab.Nombre</option>
+            }
+        </select>
+    </div>
+
+    <!-- BANCO -->
+    <div class="form-group">
+        <label>Banco</label>
+        <select asp-for="IdBanco" class="form-control" id="banco">
+            <option value="0">-- Selecciona fecha primero --</option>
+        </select>
+    </div>
+
+    <!-- FRANJA -->
+    <div class="form-group">
+        <label>Franja horaria</label>
+        <select asp-for="IdFranja" class="form-control" id="franja">
+            <option value="0">-- Selecciona banco primero --</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Reservar</button>
+</form>
+@section Scripts {
+    <script>
+        const fecha = document.getElementById("fecha");
+        const laboratorio = document.getElementById("laboratorio");
+        const banco = document.getElementById("banco");
+        const franja = document.getElementById("franja");
+
+        function resetBancosYFranjas() {
+            banco.innerHTML = "<option value='0'>-- Selecciona fecha y laboratorio --</option>";
+            franja.innerHTML = "<option value='0'>-- Selecciona banco primero --</option>";
+        }
+
+        async function cargarBancos() {
+            if (!fecha.value || laboratorio.value === "0") {
+                resetBancosYFranjas();
+                return;
+            }
+
+            banco.innerHTML = "<option>-- Cargando --</option>";
+            franja.innerHTML = "<option value='0'>-- Selecciona banco primero --</option>";
+
+            const url = `/Reservas/BancosDisponibles?idLaboratorio=${laboratorio.value}&fecha=${fecha.value}`;
+            const resp = await fetch(url);
+            const data = await resp.json();
+
+            banco.innerHTML = "<option value='0'>-- Selecciona --</option>";
+
+            if (data.length === 0) {
+                banco.innerHTML = "<option value='0'>-- No hay bancos disponibles --</option>";
+                return;
+            }
+
+            data.forEach(b => {
+                banco.innerHTML += `<option value="${b.idBanco}">${b.texto}</option>`;
+            });
+        }
+
+        async function cargarFranjas() {
+            if (banco.value === "0" || !fecha.value) {
+                franja.innerHTML = "<option value='0'>-- Selecciona banco primero --</option>";
+                return;
+            }
+
+            franja.innerHTML = "<option>-- Cargando --</option>";
+
+            const url = `/Reservas/FranjasDisponibles?idBanco=${banco.value}&fecha=${fecha.value}`;
+            const resp = await fetch(url);
+            const data = await resp.json();
+
+            franja.innerHTML = "<option value='0'>-- Selecciona --</option>";
+
+            if (data.length === 0) {
+                franja.innerHTML = "<option value='0'>-- No hay franjas disponibles --</option>";
+                return;
+            }
+
+            data.forEach(f => {
+                franja.innerHTML += `<option value="${f.idFranja}">${f.nombre}</option>`;
+            });
+        }
+
+        // Eventos
+        fecha.addEventListener("change", cargarBancos);
+        laboratorio.addEventListener("change", cargarBancos);
+        banco.addEventListener("change", cargarFranjas);
+
+        // Estado inicial
+        resetBancosYFranjas();
+    </script>
+}
+

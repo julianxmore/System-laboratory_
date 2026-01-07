@@ -1,0 +1,76 @@
+﻿@model Horario_prueba.Models.CrearReservaViewModel
+
+@{
+    ViewData["Title"] = "Editar reserva";
+    var idReserva = (int)ViewBag.IdReserva;
+}
+
+<h2>Editar reserva</h2>
+
+<form asp-action="Editar" method="post">
+    <input type="hidden" name="id" value="@idReserva" />
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <!-- LABORATORIO -->
+    <div class="form-group mb-2">
+        <label>Laboratorio</label>
+        <select asp-for="IdLaboratorio" class="form-control">
+            <option value="0">-- Selecciona --</option>
+            @foreach (var lab in Model.Laboratorios)
+            {
+                <option value="@lab.IdLaboratorio"
+                        selected="@(lab.IdLaboratorio == Model.IdLaboratorio ? "selected" : null)">
+                    @lab.Nombre
+                </option>
+            }
+        </select>
+        <span asp-validation-for="IdLaboratorio" class="text-danger"></span>
+    </div>
+
+    <!-- BANCO -->
+    <div class="form-group mb-2">
+        <label>Banco</label>
+        <select asp-for="IdBanco" class="form-control">
+            <option value="0">-- Selecciona --</option>
+            @foreach (var b in Model.Bancos)
+            {
+                <option value="@b.IdBanco"
+                        selected="@(b.IdBanco == Model.IdBanco ? "selected" : null)">
+                    @b.Laboratorio?.Nombre - @b.Codigo (@b.Estado)
+                </option>
+            }
+        </select>
+        <span asp-validation-for="IdBanco" class="text-danger"></span>
+    </div>
+
+    <!-- FRANJA -->
+    <div class="form-group mb-2">
+        <label>Franja horaria</label>
+        <select asp-for="IdFranja" class="form-control">
+            <option value="0">-- Selecciona --</option>
+            @foreach (var f in Model.Franjas)
+            {
+                <option value="@f.IdFranja"
+                        selected="@(f.IdFranja == Model.IdFranja ? "selected" : null)">
+                    @f.Nombre
+                </option>
+            }
+        </select>
+        <span asp-validation-for="IdFranja" class="text-danger"></span>
+    </div>
+
+    <!-- FECHA -->
+    <div class="form-group mb-3">
+        <label>Fecha</label>
+        <input asp-for="Fecha" type="date" class="form-control" />
+        <span asp-validation-for="Fecha" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    <a asp-action="AdminLista" class="btn btn-secondary ms-2">Volver</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

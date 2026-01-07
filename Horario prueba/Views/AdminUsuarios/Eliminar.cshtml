@@ -1,0 +1,21 @@
+﻿@model Horario_prueba.Models.Usuario
+
+@{
+    ViewData["Title"] = "Eliminar usuario";
+}
+
+<div class="container mt-4">
+    <h2>Eliminar usuario</h2>
+
+    <div class="alert alert-warning mt-3">
+        ¿Seguro que deseas eliminar a <b>@Model.Nombre</b> (@Model.Email)?
+    </div>
+
+    <form asp-action="Eliminar" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@Model.Id" />
+
+        <button class="btn btn-danger">Sí, eliminar</button>
+        <a class="btn btn-secondary" href="/AdminUsuarios/Index">Cancelar</a>
+    </form>
+</div>

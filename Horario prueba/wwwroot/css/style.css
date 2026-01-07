@@ -1,0 +1,88 @@
+/* Fondo con un degradado en tonos rojos */
+body {
+    background: linear-gradient(to right, #8B0000, #B22222);
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Contenedor de la caja de login */
+.login-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Caja de inicio de sesión */
+.login-box {
+    background: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+/* Logo */
+.logo {
+    width: 120px;
+    margin-bottom: 20px;
+}
+
+/* Título y texto */
+h2 {
+    color: #8B0000;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+/* Botón de inicio de sesión */
+button {
+    background-color: #DB4437;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    transition: background 0.3s;
+}
+
+    /* Ícono en el botón */
+    button i {
+        margin-right: 10px;
+        font-size: 20px;
+    }
+
+    /* Efecto hover en el botón */
+    button:hover {
+        background-color: #C1351D;
+    }
+
+/* Animación de aparición */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-box {
+    animation: fadeIn 0.5s ease-in-out;
+}

@@ -1,0 +1,122 @@
+﻿@model Horario_prueba.Models.AdminReservasViewModel
+
+@{
+    ViewData["Title"] = "Reservas (Admin)";
+}
+
+<div class="lab-page-wrapper">
+    <div class="lab-container">
+        <div class="lab-header">
+            <div>
+                <h1>Reservas de bancos</h1>
+                <p class="lab-subtitle">
+                    Listado de reservas vigentes y reservas ya pasadas.
+                </p>
+            </div>
+        </div>
+
+        <div class="lab-card">
+
+            <!-- 🔹 BLOQUE 1: Reservas vigentes -->
+            <h3>Reservas vigentes</h3>
+            @if (!Model.Vigentes.Any())
+            {
+                <div class="text-muted mb-4">
+                    No hay reservas vigentes.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive mb-5">
+                    <table class="table lab-table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Franja</th>
+                                <th>Laboratorio</th>
+                                <th>Banco</th>
+                                <th>Estudiante</th>
+                                <th>Estado</th>
+                                <th class="text-end">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var r in Model.Vigentes)
+                            {
+                                <tr>
+                                    <td>@r.Fecha.ToString("yyyy-MM-dd")</td>
+                                    <td>@r.FranjaHoraria?.Nombre</td>
+                                    <td>@r.Banco?.Laboratorio?.Nombre</td>
+                                    <td>@r.Banco?.Codigo</td>
+                                    <td>@r.Estudiante?.Nombre (@r.Estudiante?.Codigo)</td>
+                                    <td>@r.Estado</td>
+                                    <td class="text-end">
+                                        <a href="@Url.Action("Editar", "Reservas", new { id = r.IdReserva })"
+                                           class="btn btn-sm btn-outline-secondary me-2">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </a>
+                                        <a href="@Url.Action("Eliminar", "Reservas", new { id = r.IdReserva })"
+                                           class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-times-circle"></i> Cancelar
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            <!-- 🔹 BLOQUE 2: Reservas ya pasadas -->
+            <h3>Reservas pasadas</h3>
+            @if (!Model.Pasadas.Any())
+            {
+                <div class="text-muted">
+                    No hay reservas pasadas (ya fueron limpiadas o aún no hay histórico).
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table lab-table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Franja</th>
+                                <th>Laboratorio</th>
+                                <th>Banco</th>
+                                <th>Estudiante</th>
+                                <th>Estado</th>
+                                <th class="text-end">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var r in Model.Pasadas)
+                            {
+                                <tr>
+                                    <td>@r.Fecha.ToString("yyyy-MM-dd")</td>
+                                    <td>@r.FranjaHoraria?.Nombre</td>
+                                    <td>@r.Banco?.Laboratorio?.Nombre</td>
+                                    <td>@r.Banco?.Codigo</td>
+                                    <td>@r.Estudiante?.Nombre (@r.Estudiante?.Codigo)</td>
+                                    <td>@r.Estado</td>
+                                    <td class="text-end">
+                                        @* normalmente aquí solo verías, pero si quieres podrías permitir borrar manual *@
+                                        <a href="@Url.Action("Eliminar", "Reservas", new { id = r.IdReserva })"
+                                           class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash-alt"></i> Eliminar
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+}

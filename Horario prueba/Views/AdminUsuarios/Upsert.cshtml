@@ -1,0 +1,55 @@
+﻿@model Horario_prueba.Models.Usuario
+
+@{
+    var esNuevo = Model.Id == 0;
+    ViewData["Title"] = esNuevo ? "Crear usuario" : "Editar usuario";
+    var action = esNuevo ? "Crear" : "Editar";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+
+    <form asp-action="@action" method="post" class="mt-3">
+        @Html.AntiForgeryToken()
+
+        @* Para Editar: id *@
+        @if (!esNuevo)
+        {
+            <input type="hidden" asp-for="Id" />
+        }
+
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input asp-for="Nombre" class="form-control" />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Código</label>
+            <input asp-for="Codigo" class="form-control" />
+            <span asp-validation-for="Codigo" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" asp-for="EsAdmin" />
+            <label class="form-check-label">Es administrador</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            @(esNuevo ? "Crear" : "Guardar cambios")
+        </button>
+        <a class="btn btn-secondary" href="/AdminUsuarios/Index">Volver</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

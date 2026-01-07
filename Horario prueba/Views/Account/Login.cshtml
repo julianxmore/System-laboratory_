@@ -1,0 +1,73 @@
+﻿@model Horario_prueba.Controllers.AccountController.LoginViewModel
+
+@{
+    ViewData["Title"] = "Ingreso Laboratorios";
+
+    // Si hay errores de validación (después de enviar el form), mostramos directamente el formulario
+    bool tieneErrores = !ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0;
+}
+
+<h2>Ingreso a laboratorios</h2>
+
+<!-- AVISO INICIAL -->
+<div id="avisoRegistro"
+     class="alert alert-info mt-3"
+     @(tieneErrores ? "style=\"display:none;\"" : "")>
+    <h4 class="alert-heading">Antes de continuar</h4>
+    <p>
+        Si es la primera vez que ingresas a este sistema, se creará tu perfil con los
+        datos que escribas a continuación. Por favor:
+    </p>
+    <ul>
+        <li>Escribe tu <strong>nombre completo en MAYÚSCULAS</strong>.</li>
+        <li>Verifica muy bien tu <strong>código estudiantil (11 dígitos)</strong>.</li>
+        <li>Usa tu <strong>correo institucional</strong> (<code>@@udistrital.edu.co</code>).</li>
+    </ul>
+    <p class="mb-2">
+        Estos datos quedarán guardados y se usarán para tus futuras reservas de laboratorio.
+    </p>
+    <button type="button"
+            class="btn btn-primary btn-sm"
+            onclick="mostrarFormularioLogin()">
+        He leído y deseo continuar
+    </button>
+</div>
+
+<!-- FORMULARIO DE LOGIN -->
+<div id="loginForm" @(tieneErrores ? "" : "style=\"display:none;\"")>
+    <form asp-action="Login" method="post" class="mt-3">
+        <div class="text-danger">
+            @Html.ValidationSummary()
+        </div>
+
+        <div class="form-group mb-2">
+            <label>Código de estudiante</label>
+            <input asp-for="Codigo" class="form-control" />
+            <span asp-validation-for="Codigo" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-2">
+            <label>Nombre completo</label>
+            <input asp-for="Nombre" class="form-control" />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label>Correo institucional (&#64;udistrital.edu.co)</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-1">Ingresar</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function mostrarFormularioLogin() {
+            document.getElementById('avisoRegistro').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+        }
+    </script>
+}

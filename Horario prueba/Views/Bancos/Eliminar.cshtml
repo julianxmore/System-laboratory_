@@ -1,0 +1,11 @@
+﻿@model Horario_prueba.Models.Banco
+
+<h2>Eliminar banco</h2>
+
+<p>¿Seguro que deseas eliminar el banco <strong>@Model.Codigo</strong> del laboratorio <strong>@Model.Laboratorio?.Nombre</strong>?</p>
+
+<form asp-action="Eliminar" method="post">
+    <input type="hidden" asp-for="IdBanco" />
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

@@ -1,0 +1,65 @@
+﻿@model Horario_prueba.Models.Estudiante
+
+@{
+    var esNuevo = Model.IdEstudiante == 0;
+    var action = esNuevo ? "Crear" : "Editar";
+    var esAdmin = (ViewBag.EsAdmin as bool?) ?? false;
+
+    ViewData["Title"] = esNuevo ? "Crear estudiante" : "Editar estudiante";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+
+    <form asp-action="@action" method="post" class="mt-3">
+        @Html.AntiForgeryToken()
+
+        @if (!esNuevo)
+        {
+            <input type="hidden" asp-for="IdEstudiante" />
+        }
+
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input asp-for="Nombre" class="form-control" />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Código</label>
+            <input asp-for="Codigo" class="form-control" />
+            <span asp-validation-for="Codigo" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        @* si tu modelo tiene Programa, déjalo; si no, bórralo *@
+        <div class="mb-3">
+            <label class="form-label">Programa</label>
+            <input asp-for="Programa" class="form-control" />
+        </div>
+
+        @* Checkbox admin: para que siempre envíe false cuando no esté marcado *@
+        <input type="hidden" name="esAdmin" value="false" />
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" name="esAdmin" value="true" @(esAdmin ? "checked" : "") />
+            <label class="form-check-label">Convertir en administrador</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            @(esNuevo ? "Crear" : "Guardar cambios")
+        </button>
+        <a class="btn btn-secondary" href="/AdminEstudiantes/Index">Volver</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
